@@ -93,7 +93,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 <td>
 	<ul>
 		<li>per-user setup</li>
-    <li>developer-oriented</li>
+		<li>developer-oriented</li>
 	</ul>
 </td>
 </tr>
