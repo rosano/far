@@ -1,13 +1,284 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Forge API Reference</title>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge API Reference</title>
+
+<script src="https://unpkg.com/remotestoragejs@1.2.3/release/remotestorage.js"></script>
+<script src="https://unpkg.com/remotestorage-widget@1.7.0/build/widget.js"></script>
+
+<style>
+.block {
+	display: block;
+	margin: 10px 0;
+}
+.box {
+	width: 100%;
+	overflow-wrap: break-word;
+}
+</style>
+
 </head>
 <body>
 
 <h1>hello world</h1>
+
+<hr>
+
+<h2>oauth</h2>
+
+<h3>1: request token</h3>
+
+<div id="1-link" class="box"></div>
+
+<hr>
+
+<h3>2: exchange token</h3>
+
+<div id="2-post" class="box"></div>
+
+<script>
+const redirect_uri = 'https://static.rosano.ca/far/';
+const forgejoDomain = 'codeberg.org';
+const code_challenge_method = 'plain';
+
+const uSerialPromises = function (inputData) {
+	return inputData.reduce(async function (coll, e) {
+		return (await coll).concat(await new Promise(function (res, rej) {
+			try {
+				res(e());
+			} catch (error) {
+				rej(error);
+			}
+		}));
+	}, Promise.resolve([]));
+};
+
+const _storagePath = 'data.json';
+let _storageData;
+
+const mod = {
+	randomString (length) {
+		const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let result = '';
+		for (let i = 0; i < length; i++) {
+			result += charset.charAt(Math.floor(Math.random() * charset.length));
+		}
+		return result;
+	},
+
+	async sha256 (message) {
+		const msgBuffer = new TextEncoder().encode(message); // Encode as (UTF-8)
+		const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer); // Hash the message
+		const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
+		const hashBase64 = btoa(String.fromCharCode(...hashArray)); // Convert bytes to base64
+		return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); // Base64url encode
+	},
+
+	createURL (base, parameters) {
+		const url = new URL(base);
+		Object.keys(parameters).forEach(key => url.searchParams.append(key, parameters[key]));
+		return url.toString();
+	},
+
+	clearContainer (element) {
+		while (element.firstChild) {
+			element.removeChild(element.firstChild);
+		}
+	},
+
+	// COMMANDS
+
+	async generateAuthURL () {
+		const code_verifier = mod.randomString(128);
+		const code_challenge = await mod.sha256(code_verifier);
+
+		const params = {
+			client_id: _storageData.client_id,
+			redirect_uri,
+			response_type: 'code',
+			code_challenge_method,
+			code_challenge,
+			state: code_challenge,
+		};
+
+		const authorizationURL = mod.createURL(`https://${ forgejoDomain }/login/oauth/authorize`, params);
+
+		const link = document.createElement('a');
+		link.href = link.textContent = authorizationURL;
+		document.getElementById('1-link').appendChild(link);
+
+		const pre = document.createElement('pre');
+		pre.textContent = JSON.stringify(params, null, ' ');
+		document.getElementById('1-link').appendChild(pre);
+	},
+ 
+	async generateTokenRequest (code) {
+		const url = `https://${ forgejoDomain }/login/oauth/access_token`;
+
+		const data = {
+			client_id: _storageData.client_id,
+			code,
+			grant_type: 'authorization_code',
+			redirect_uri,
+			// code_challenge_method,
+			code_verifier: (new URLSearchParams(location.search)).get('state'),
+		};
+
+		const span = document.createElement('span');
+		span.textContent = 'POST ' + url;
+		document.getElementById('2-post').appendChild(span);
+
+		const pre = document.createElement('pre');
+		pre.textContent = JSON.stringify(data, null, ' ');
+		document.getElementById('2-post').appendChild(pre);
+
+		const button = document.createElement('button');
+		button.textContent = 'clear state';
+		button.onclick = () => window.location.href = redirect_uri;
+		document.getElementById('2-post').appendChild(button);
+
+		const result = document.createElement('pre');
+		result.textContent = JSON.stringify(await (await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})).json(), null, ' ');
+		document.getElementById('2-post').appendChild(result);
+		
+		// .then(response => {
+		// 	console.log(response);
+		// 	if (!response.ok) {
+		// 		throw new Error('Network response was not ok ' + response.statusText);
+		// 	}
+		// 	return response.json();
+		// });
+	},
+
+	// DATA
+
+	_DataSave () {
+		return mod.storage.storeFile('application/json', _storagePath, JSON.stringify(_storageData));
+	},
+
+	DataSet (key, value) {
+		_storageData[key] = value;
+		return mod._DataSave();
+	},
+
+	// SETUP
+
+	async setupData () {
+		_storageData = await mod.storage.getObject(_storagePath);
+
+		if (_storageData) {
+			return;
+		}
+
+		_storageData = {};
+		
+		mod._DataSave();
+	},
+
+	_setupClientIDForm () {
+		let input = document.createElement('input');
+
+		document.getElementById('1-link').appendChild(Object.assign(input, {
+			textContent: 'client_id',
+			autofocus: true,
+		}));
+
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('button'), {
+			textContent: 'Save Client ID',
+			onclick () {
+				mod.DataSet('client_id', input.value);
+
+				mod.clearContainer(document.getElementById('1-link'));
+
+				mod.setupClientID();
+			},
+		}));
+	},
+
+	setupClientID () {
+		if (!_storageData.client_id) {
+			return mod._setupClientIDForm();
+		}
+
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('pre'), {
+			textContent: 'client_id ' + _storageData.client_id,
+		}));
+
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('button'), {
+			textContent: 'Clear Client ID',
+			classList: 'block',
+			onclick () {
+				mod.DataSet('client_id', undefined);
+
+				mod.clearContainer(document.getElementById('1-link'));
+				
+				mod.setupClientID();
+			},
+		}));
+
+		if ((new URLSearchParams(location.search)).get('code')) {
+			return;
+		}
+
+		return mod.generateAuthURL();
+	},
+
+	setupOauth () {
+		const code = (new URLSearchParams(location.search)).get('code');
+		
+		if (!code) {
+			return;
+		}
+
+		return mod.generateTokenRequest(code);	
+	},
+
+	// LIFECYCLE
+
+	LifecycleDidLoad() {
+		const remoteStorage = new RemoteStorage();
+
+		const widget = new Widget(remoteStorage);
+		widget.attach();
+
+		const directory = 'ca.rosano.far';
+		const scope = `/${ directory }/`;
+		remoteStorage.access.claim(directory, 'rw');
+		remoteStorage.caching.enable(scope);
+		mod.storage = remoteStorage.scope(scope);
+
+		remoteStorage.on('error', (error) => {
+			console.error('Error occurred:', error);
+		});
+
+		remoteStorage.on('connected', () => {
+			console.log('Connected to RemoteStorage');
+		});
+
+		remoteStorage.on('disconnected', () => {
+			console.log('Disconnected from RemoteStorage');
+		});
+
+		remoteStorage.on('ready', mod.LifecycleStorageDidInitialize);
+	},
+
+	LifecycleStorageDidInitialize () {
+		return uSerialPromises(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
+	},
+
+};
+
+mod.LifecycleDidLoad();
+</script>
 
 </body>
 </html>
