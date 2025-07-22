@@ -97,5 +97,16 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 	</ul>
 </td>
 </tr>
+<tr>
+<td>
+	<b>oauth app user token</b>
+</td>
+<td>
+	<ul>
+		<li>per-app/dev setup</li>
+		<li>simple end-user ux</li>
+	</ul>
+</td>
+</tr>
 </tbody>
 </table>
