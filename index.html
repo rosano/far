@@ -186,22 +186,29 @@ const mod = {
 	},
 
 	_setupClientIDForm () {
-		let input = document.createElement('input');
+		const onsubmit = () => {
+			mod.DataSet('client_id', input.value);
 
-		document.getElementById('1-link').appendChild(Object.assign(input, {
+			mod.clearContainer(document.getElementById('1-link'));
+
+			mod.setupClientID();
+		};
+
+		const form = document.createElement('form');
+		const input = document.createElement('input');
+
+		document.getElementById('1-link').appendChild(Object.assign(form, {
+			onsubmit,
+		}));
+
+		form.appendChild(Object.assign(input, {
 			placeholder: 'client_id',
 			autofocus: true,
 		}));
 
-		document.getElementById('1-link').appendChild(Object.assign(document.createElement('button'), {
+		form.appendChild(Object.assign(document.createElement('button'), {
 			textContent: 'Save Client ID',
-			onclick () {
-				mod.DataSet('client_id', input.value);
-
-				mod.clearContainer(document.getElementById('1-link'));
-
-				mod.setupClientID();
-			},
+			onclick: onsubmit,
 		}));
 	},
 
