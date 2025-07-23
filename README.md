@@ -8,7 +8,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 <tbody>
 <tr>
 <td>
-	<b><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens">personal access token fine-grained</a></b>
+	<a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens">personal access token fine-grained</a>
 </td>
 <td rowspan="2">
 	<ul>
@@ -25,7 +25,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 </tr>
 <tr>
 <td>
-	<b><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens">personal access token classic</a></b>
+	<a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#fine-grained-personal-access-tokens">personal access token classic</a>
 </td>
 <td>
 	<ul>
@@ -35,7 +35,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 </tr>
 <tr>
 <td>
-	<b><a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app#using-the-web-application-flow-to-generate-a-user-access-token">github/oauth app user token, web flow login</a></b>
+	<a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app#using-the-web-application-flow-to-generate-a-user-access-token">github/oauth app user token, web flow login</a>
 </td>
 <td rowspan="2">
 	<ul>
@@ -55,7 +55,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 </tr>
 <tr>
 <td>
-	<b><a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app#using-the-device-flow-to-generate-a-user-access-token">github/oauth app user token, device flow login</a></b>
+	<a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-a-user-access-token-for-a-github-app#using-the-device-flow-to-generate-a-user-access-token">github/oauth app user token, device flow login</a>
 </td>
 <td>
 	<ul>
@@ -68,7 +68,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 </tr>
 <tr>
 <td>
-	<b><a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation">github app installation token</a></b>
+	<a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation">github app installation token</a>
 </td>
 <td colspan="2">
 	<ul>
@@ -88,7 +88,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 <tbody>
 <tr>
 <td>
-	<b><a href="https://docs.codeberg.org/advanced/access-token/">access token</a></b>
+	<a href="https://docs.codeberg.org/advanced/access-token/">access token</a>
 </td>
 <td>
 	<ul>
@@ -99,7 +99,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 </tr>
 <tr>
 <td>
-	<b><a href="https://forgejo.org/docs/latest/user/oauth2-provider/">oauth app user token</a></b>
+	<a href="https://forgejo.org/docs/latest/user/oauth2-provider/">oauth app user token</a>
 </td>
 <td>
 	<ul>
