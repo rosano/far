@@ -106,13 +106,14 @@ const mod = {
 
 		const authorizationURL = mod.createURL(`https://${ forgejoDomain }/login/oauth/authorize`, params);
 
-		const link = document.createElement('a');
-		link.href = link.textContent = authorizationURL;
-		document.getElementById('1-link').appendChild(link);
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('a'), {
+			href: authorizationURL,
+			textContent: authorizationURL,
+		}));
 
-		const pre = document.createElement('pre');
-		pre.textContent = JSON.stringify(params, null, ' ');
-		document.getElementById('1-link').appendChild(pre);
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('pre'), {
+			textContent: JSON.stringify(params, null, ' '),
+		}));
 	},
  
 	async generateTokenRequest (code) {
@@ -127,29 +128,29 @@ const mod = {
 			code_verifier: (new URLSearchParams(location.search)).get('state'),
 		};
 
-		const span = document.createElement('span');
-		span.textContent = 'POST ' + url;
-		document.getElementById('2-post').appendChild(span);
+		document.getElementById('2-post').appendChild(Object.assign(document.createElement('span'), {
+			textContent: 'POST ' + url,
+		}));
 
-		const pre = document.createElement('pre');
-		pre.textContent = JSON.stringify(data, null, ' ');
-		document.getElementById('2-post').appendChild(pre);
+		document.getElementById('2-post').appendChild(Object.assign(document.createElement('pre'), {
+			textContent: JSON.stringify(data, null, ' '),
+		}));
 
-		const button = document.createElement('button');
-		button.textContent = 'clear state';
-		button.onclick = () => window.location.href = redirect_uri;
-		document.getElementById('2-post').appendChild(button);
+		document.getElementById('2-post').appendChild(Object.assign(document.createElement('button'), {
+			textContent: 'clear state',
+			onclick: () => window.location.href = redirect_uri,
+		}));
 
-		const result = document.createElement('pre');
-		result.textContent = JSON.stringify(await (await fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		})).json(), null, ' ');
-		document.getElementById('2-post').appendChild(result);
-		
+		document.getElementById('2-post').appendChild(Object.assign(document.createElement('pre'), {
+			textContent: JSON.stringify(await (await fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			})).json(), null, ' '),
+		}));
+
 		// .then(response => {
 		// 	console.log(response);
 		// 	if (!response.ok) {
