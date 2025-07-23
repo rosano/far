@@ -105,6 +105,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 	<ul>
 		<li>per-app/dev setup</li>
 		<li>simple end-user ux</li>
+		<li>only works per instance (not federated)</li>
 	</ul>
 </td>
 </tr>
