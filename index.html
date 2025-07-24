@@ -40,7 +40,7 @@
 <div id="2-post" class="box"></div>
 
 <script>
-const redirect_uri = location.href.split('?')[0];
+const redirect_uri = location.href.split('?')[0].split('#')[0];
 const forgejoDomain = 'codeberg.org';
 const code_challenge_method = 'plain';
 
