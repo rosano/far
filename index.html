@@ -61,10 +61,6 @@ h3 {
 <p><em>all configuration can be synced to your remoteStorage.</em></p>
 
 <script>
-const redirect_uri = location.href.split('?')[0].split('#')[0];
-const forgejoDomain = 'codeberg.org';
-const code_challenge_method = 'plain';
-
 (() => {
 
 const uSerialPromises = (inputData) => {
@@ -108,8 +104,8 @@ const uClearContainer = (element) => {
 	}
 };
 
-const _dataPath = 'data.json';
-let _dataObject;
+const redirect_uri = location.href.split('?')[0].split('#')[0];
+const code_challenge_method = 'plain';
 
 const mod = {
 
@@ -144,7 +140,7 @@ const mod = {
 		const url = `https://${ forgejoDomain }/login/oauth/access_token`;
 
 		const data = {
-			client_id: _dataObject.client_id,
+			client_id: mod._dataObject.ForgejoClientID,
 			code,
 			grant_type: 'authorization_code',
 			redirect_uri,
@@ -187,24 +183,24 @@ const mod = {
 	// DATA
 
 	_dataSave () {
-		return mod.storage.storeFile('application/json', _dataPath, JSON.stringify(_dataObject));
+		return mod.storage.storeFile('application/json', mod._dataPath, JSON.stringify(mod._dataObject));
 	},
 
 	dataSet (key, value) {
-		_dataObject[key] = value;
+		mod._dataObject[key] = value;
 		return mod._dataSave();
 	},
 
 	dataHandleSync (event) {
 		if (['remote', 'conflict'].includes(event.origin)) {
-			_dataObject = event.newValue;
+			mod._dataObject = event.newValue;
 
 			mod.lifecycleStorageDidInitialize();
 		}
 	},
 
 	dataHandleDisconnect () {
-		_dataObject = {};
+		mod._dataObject = {};
 
 		mod.lifecycleStorageDidInitialize();
 	},
@@ -212,10 +208,12 @@ const mod = {
 	// SETUP
 
 	async _setupData () {
-		_dataObject = await mod.storage.getObject(_dataPath);
+		mod._dataPath = 'data.json';
+		mod._dataObject = await mod.storage.getObject(mod._dataPath);
 
-		if (!_dataObject) {
-			_dataObject = {};
+		if (!mod._dataObject) {
+			mod._dataObject = {
+			};
 			await mod._dataSave();
 		}
 
