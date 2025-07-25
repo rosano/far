@@ -194,12 +194,14 @@ const mod = {
 	dataHandleSync (event) {
 		if (['remote', 'conflict'].includes(event.origin)) {
 			_dataObject = event.newValue;
+
+			mod.LifecycleStorageDidInitialize();
 		}
 	},
 
 	dataHandleDisconnect () {
 		_dataObject = {};
-		
+
 		mod.LifecycleStorageDidInitialize();
 	},
 
