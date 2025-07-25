@@ -104,8 +104,8 @@ const uClearContainer = (element) => {
 	}
 };
 
-const _storagePath = 'data.json';
-let _storageData;
+const _dataPath = 'data.json';
+let _dataObject;
 
 const mod = {
 
@@ -116,7 +116,7 @@ const mod = {
 		const code_challenge = await uSHA256(code_verifier);
 
 		const params = {
-			client_id: _storageData.client_id,
+			client_id: _dataObject.client_id,
 			redirect_uri,
 			response_type: 'code',
 			code_challenge_method,
@@ -140,7 +140,7 @@ const mod = {
 		const url = `https://${ forgejoDomain }/login/oauth/access_token`;
 
 		const data = {
-			client_id: _storageData.client_id,
+			client_id: _dataObject.client_id,
 			code,
 			grant_type: 'authorization_code',
 			redirect_uri,
@@ -183,30 +183,30 @@ const mod = {
 	// DATA
 
 	_dataSave () {
-		return mod.storage.storeFile('application/json', _storagePath, JSON.stringify(_storageData));
+		return mod.storage.storeFile('application/json', _dataPath, JSON.stringify(_dataObject));
 	},
 
 	dataSet (key, value) {
-		_storageData[key] = value;
+		_dataObject[key] = value;
 		return mod._dataSave();
 	},
 
 	dataHandleSync (event) {
 		if (['remote', 'conflict'].includes(event.origin)) {
-			_storageData = event.newValue;
+			_dataObject = event.newValue;
 		}
 	},
 
 	// SETUP
 
 	async setupData () {
-		_storageData = await mod.storage.getObject(_storagePath);
+		_dataObject = await mod.storage.getObject(_dataPath);
 
-		if (_storageData) {
+		if (_dataObject) {
 			return;
 		}
 
-		_storageData = {};
+		_dataObject = {};
 		
 		mod._dataSave();
 	},
@@ -243,12 +243,12 @@ const mod = {
 	},
 
 	setupClientID () {
-		if (!_storageData.client_id) {
+		if (!_dataObject.client_id) {
 			return mod._setupClientIDForm();
 		}
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('pre'), {
-			textContent: 'client_id ' + _storageData.client_id,
+			textContent: 'client_id ' + _dataObject.client_id,
 		}));
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('button'), {
