@@ -318,8 +318,7 @@ const mod = {
 	},
 
 	lifecycleStorageDidInitialize () {
-
-		return uSerialPromises(['_setupData'].concat(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
+		return uSerialPromises(['_setupData'].concat(Object.keys(mod).filter(e => e.match(/^setup/))).map(e => mod[e]));
 	},
 
 };
