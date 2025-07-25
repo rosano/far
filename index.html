@@ -61,7 +61,9 @@ const redirect_uri = location.href.split('?')[0].split('#')[0];
 const forgejoDomain = 'codeberg.org';
 const code_challenge_method = 'plain';
 
-const uSerialPromises = function (inputData) {
+(() => {
+
+const uSerialPromises = (inputData) => {
 	return inputData.reduce(async function (coll, e) {
 		return (await coll).concat(await new Promise(function (res, rej) {
 			try {
@@ -73,44 +75,45 @@ const uSerialPromises = function (inputData) {
 	}, Promise.resolve([]));
 };
 
+const uRandomString = (length) => {
+	const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let result = '';
+	for (let i = 0; i < length; i++) {
+		result += charset.charAt(Math.floor(Math.random() * charset.length));
+	}
+	return result;
+};
+
+const uSHA256 = async (message) => {
+	const msgBuffer = new TextEncoder().encode(message); // Encode as (UTF-8)
+	const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer); // Hash the message
+	const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
+	const hashBase64 = btoa(String.fromCharCode(...hashArray)); // Convert bytes to base64
+	return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); // Base64url encode
+};
+
+const uURL = (base, parameters) => {
+	const url = new URL(base);
+	Object.keys(parameters).forEach(key => url.searchParams.append(key, parameters[key]));
+	return url.toString();
+};
+
+const uClearContainer = (element) => {
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
+};
+
 const _storagePath = 'data.json';
 let _storageData;
 
 const mod = {
-	randomString (length) {
-		const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		let result = '';
-		for (let i = 0; i < length; i++) {
-			result += charset.charAt(Math.floor(Math.random() * charset.length));
-		}
-		return result;
-	},
-
-	async sha256 (message) {
-		const msgBuffer = new TextEncoder().encode(message); // Encode as (UTF-8)
-		const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer); // Hash the message
-		const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
-		const hashBase64 = btoa(String.fromCharCode(...hashArray)); // Convert bytes to base64
-		return hashBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); // Base64url encode
-	},
-
-	createURL (base, parameters) {
-		const url = new URL(base);
-		Object.keys(parameters).forEach(key => url.searchParams.append(key, parameters[key]));
-		return url.toString();
-	},
-
-	clearContainer (element) {
-		while (element.firstChild) {
-			element.removeChild(element.firstChild);
-		}
-	},
 
 	// COMMANDS
 
 	async generateAuthURL () {
-		const code_verifier = mod.randomString(128);
-		const code_challenge = await mod.sha256(code_verifier);
+		const code_verifier = uRandomString(128);
+		const code_challenge = await uSHA256(code_verifier);
 
 		const params = {
 			client_id: _storageData.client_id,
@@ -121,7 +124,7 @@ const mod = {
 			state: code_challenge,
 		};
 
-		const authorizationURL = mod.createURL(`https://${ forgejoDomain }/login/oauth/authorize`, params);
+		const authorizationURL = uURL(`https://${ forgejoDomain }/login/oauth/authorize`, params);
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('a'), {
 			href: authorizationURL,
@@ -216,7 +219,7 @@ const mod = {
 		const onsubmit = () => {
 			mod.dataSet('client_id', input.value);
 
-			mod.clearContainer(document.getElementById('1-link'));
+			uClearContainer(document.getElementById('1-link'));
 
 			mod.setupClientID();
 		};
@@ -254,7 +257,7 @@ const mod = {
 			onclick () {
 				mod.dataSet('client_id', undefined);
 
-				mod.clearContainer(document.getElementById('1-link'));
+				uClearContainer(document.getElementById('1-link'));
 				
 				mod.setupClientID();
 			},
@@ -315,6 +318,8 @@ const mod = {
 };
 
 mod.LifecycleDidLoad();
+
+})();
 </script>
 
 <hr>
