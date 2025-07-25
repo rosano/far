@@ -202,8 +202,6 @@ const mod = {
 	dataHandleDisconnect () {
 		_dataObject = {};
 
-		uClearContainer(document.getElementById('1-link'));
-
 		mod.LifecycleStorageDidInitialize();
 	},
 
@@ -226,10 +224,10 @@ const mod = {
 	},
 
 	_setupClientIDForm () {
+		uClearContainer(document.getElementById('1-link'));
+		
 		const onsubmit = () => {
 			mod.dataSet('client_id', input.value);
-
-			uClearContainer(document.getElementById('1-link'));
 
 			mod.setupClientID();
 		};
@@ -253,6 +251,8 @@ const mod = {
 	},
 
 	setupClientID () {
+		uClearContainer(document.getElementById('1-link'));
+
 		if (!_dataObject.client_id) {
 			return mod._setupClientIDForm();
 		}
@@ -267,8 +267,6 @@ const mod = {
 			onclick () {
 				mod.dataSet('client_id', undefined);
 
-				uClearContainer(document.getElementById('1-link'));
-				
 				mod.setupClientID();
 			},
 		}));
