@@ -210,13 +210,12 @@ const mod = {
 	async _setupData () {
 		_dataObject = await mod.storage.getObject(_dataPath);
 
-		if (_dataObject) {
-			return;
+		if (!_dataObject) {
+			_dataObject = {};
+			await mod._dataSave();
 		}
 
-		_dataObject = {};
-		
-		mod._dataSave();
+		return mod.lifecycleStorageDidInitialize();
 	},
 
 	setupRedirect () {
@@ -314,11 +313,12 @@ const mod = {
 
 		mod.storage.on('change', mod.dataHandleSync);
 
-		remoteStorage.on('ready', mod.lifecycleStorageDidInitialize);
+		remoteStorage.on('ready', mod._setupData);
 	},
 
 	lifecycleStorageDidInitialize () {
-		return uSerialPromises(['_setupData'].concat(Object.keys(mod).filter(e => e.match(/^setup/))).map(e => mod[e]));
+		return uSerialPromises(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
+
 	},
 
 };
