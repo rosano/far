@@ -29,6 +29,12 @@
 
 <h2>oauth</h2>
 
+<p>Make sure <code id="0-config">this url</code> is registered in your as a redirect URI</p>
+
+<div id="0-config" class="box">
+
+</div>
+
 <h3>1: request token</h3>
 
 <div id="1-link" class="box"></div>
@@ -183,6 +189,10 @@ const mod = {
 		_storageData = {};
 		
 		mod._DataSave();
+	},
+
+	setupRedirect () {
+		document.getElementById('0-config').textContent = redirect_uri;
 	},
 
 	_setupClientIDForm () {
