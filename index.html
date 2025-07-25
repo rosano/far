@@ -179,13 +179,13 @@ const mod = {
 
 	// DATA
 
-	_DataSave () {
+	_dataSave () {
 		return mod.storage.storeFile('application/json', _storagePath, JSON.stringify(_storageData));
 	},
 
-	DataSet (key, value) {
+	dataSet (key, value) {
 		_storageData[key] = value;
-		return mod._DataSave();
+		return mod._dataSave();
 	},
 
 	// SETUP
@@ -199,7 +199,7 @@ const mod = {
 
 		_storageData = {};
 		
-		mod._DataSave();
+		mod._dataSave();
 	},
 
 	setupRedirect () {
@@ -208,7 +208,7 @@ const mod = {
 
 	_setupClientIDForm () {
 		const onsubmit = () => {
-			mod.DataSet('client_id', input.value);
+			mod.dataSet('client_id', input.value);
 
 			mod.clearContainer(document.getElementById('1-link'));
 
@@ -246,7 +246,7 @@ const mod = {
 			textContent: 'Clear Client ID',
 			classList: 'block',
 			onclick () {
-				mod.DataSet('client_id', undefined);
+				mod.dataSet('client_id', undefined);
 
 				mod.clearContainer(document.getElementById('1-link'));
 				
