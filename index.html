@@ -116,7 +116,7 @@ const mod = {
 		const code_challenge = await uSHA256(code_verifier);
 
 		const params = {
-			client_id: _dataObject.client_id,
+			client_id: mod._dataObject.ForgejoClientID,
 			redirect_uri,
 			response_type: 'code',
 			code_challenge_method,
@@ -228,7 +228,7 @@ const mod = {
 		uClearContainer(document.getElementById('1-link'));
 		
 		const onsubmit = () => {
-			mod.dataSet('client_id', input.value);
+			mod.dataSet('ForgejoClientID', input.value);
 
 			mod.setupClientID();
 		};
@@ -254,19 +254,19 @@ const mod = {
 	setupClientID () {
 		uClearContainer(document.getElementById('1-link'));
 
-		if (!_dataObject.client_id) {
+		if (!mod._dataObject.ForgejoClientID) {
 			return mod._setupClientIDForm();
 		}
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('pre'), {
-			textContent: 'client_id ' + _dataObject.client_id,
+			textContent: 'client_id ' + mod._dataObject.ForgejoClientID,
 		}));
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('button'), {
 			textContent: 'Clear Client ID',
 			classList: 'block',
 			onclick () {
-				mod.dataSet('client_id', undefined);
+				mod.dataSet('ForgejoClientID', undefined);
 
 				mod.setupClientID();
 			},
