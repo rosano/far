@@ -195,14 +195,14 @@ const mod = {
 		if (['remote', 'conflict'].includes(event.origin)) {
 			_dataObject = event.newValue;
 
-			mod.LifecycleStorageDidInitialize();
+			mod.lifecycleStorageDidInitialize();
 		}
 	},
 
 	dataHandleDisconnect () {
 		_dataObject = {};
 
-		mod.LifecycleStorageDidInitialize();
+		mod.lifecycleStorageDidInitialize();
 	},
 
 	// SETUP
