@@ -297,6 +297,8 @@ const mod = {
 			console.log('Disconnected from RemoteStorage');
 		});
 
+		remoteStorage.on('change', console.log);
+
 		remoteStorage.on('ready', mod.LifecycleStorageDidInitialize);
 	},
 
