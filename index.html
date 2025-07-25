@@ -197,6 +197,12 @@ const mod = {
 		}
 	},
 
+	dataHandleDisconnect () {
+		_dataObject = {};
+		
+		mod.LifecycleStorageDidInitialize();
+	},
+
 	// SETUP
 
 	async setupData () {
@@ -302,9 +308,7 @@ const mod = {
 			console.log('Connected to RemoteStorage');
 		});
 
-		remoteStorage.on('disconnected', () => {
-			console.log('Disconnected from RemoteStorage');
-		});
+		remoteStorage.on('disconnected', mod.dataHandleDisconnect);
 
 		mod.storage.on('change', mod.dataHandleSync);
 
