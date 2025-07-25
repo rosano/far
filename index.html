@@ -42,7 +42,7 @@ h3 {
 
 <hr>
 
-<h2>oauth dance for codeberg.org</h2>
+<h2>oauth dance for <input id="instance" placeholder="Forgejo domain"></h2>
 
 <p class="notice">Make sure <code id="0-config">this url</code> is registered in your as a redirect URI.</p>
 
@@ -124,7 +124,7 @@ const mod = {
 			state: code_challenge,
 		};
 
-		const authorizationURL = uURL(`https://${ forgejoDomain }/login/oauth/authorize`, params);
+		const authorizationURL = uURL(`https://${ mod._dataObject.ForgejoDomain }/login/oauth/authorize`, params);
 
 		document.getElementById('1-link').appendChild(Object.assign(document.createElement('a'), {
 			href: authorizationURL,
@@ -137,7 +137,7 @@ const mod = {
 	},
  
 	async generateTokenRequest (code) {
-		const url = `https://${ forgejoDomain }/login/oauth/access_token`;
+		const url = `https://${ mod._dataObject.ForgejoDomain }/login/oauth/access_token`;
 
 		const data = {
 			client_id: mod._dataObject.ForgejoClientID,
@@ -213,11 +213,24 @@ const mod = {
 
 		if (!mod._dataObject) {
 			mod._dataObject = {
+				ForgejoDomain: 'codeberg.org',
 			};
 			await mod._dataSave();
 		}
 
 		return mod.lifecycleStorageDidInitialize();
+	},
+
+	setupInstance () {
+		Object.assign(document.getElementById('instance'), {
+			value: mod._dataObject.ForgejoDomain,
+			oninput: (event) => {
+				mod.dataSet('ForgejoDomain', event.target.value);
+
+				return mod.lifecycleStorageDidInitialize();
+			},
+		})
+
 	},
 
 	setupRedirect () {
