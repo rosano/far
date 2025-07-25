@@ -292,7 +292,7 @@ const mod = {
 
 	// LIFECYCLE
 
-	LifecycleDidLoad() {
+	lifecycleDidLoad() {
 		const remoteStorage = new RemoteStorage();
 
 		const widget = new Widget(remoteStorage);
@@ -316,16 +316,16 @@ const mod = {
 
 		mod.storage.on('change', mod.dataHandleSync);
 
-		remoteStorage.on('ready', mod.LifecycleStorageDidInitialize);
+		remoteStorage.on('ready', mod.lifecycleStorageDidInitialize);
 	},
 
-	LifecycleStorageDidInitialize () {
+	lifecycleStorageDidInitialize () {
 		return uSerialPromises(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
 	},
 
 };
 
-mod.LifecycleDidLoad();
+mod.lifecycleDidLoad();
 
 })();
 </script>
