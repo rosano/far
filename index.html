@@ -209,7 +209,7 @@ const mod = {
 
 	// SETUP
 
-	async setupData () {
+	async _setupData () {
 		_dataObject = await mod.storage.getObject(_dataPath);
 
 		if (_dataObject) {
@@ -320,7 +320,8 @@ const mod = {
 	},
 
 	lifecycleStorageDidInitialize () {
-		return uSerialPromises(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
+
+		return uSerialPromises(['_setupData'].concat(Object.keys(mod).filter(e => e.match(/^setup/)).map(e => mod[e]));
 	},
 
 };
