@@ -167,17 +167,9 @@ const mod = {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(data)
+				body: JSON.stringify(data),
 			})).json(), null, ' '),
 		}));
-
-		// .then(response => {
-		// 	console.log(response);
-		// 	if (!response.ok) {
-		// 		throw new Error('Network response was not ok ' + response.statusText);
-		// 	}
-		// 	return response.json();
-		// });
 	},
 
 	// DATA
@@ -299,7 +291,7 @@ const mod = {
 			return;
 		}
 
-		return mod.generateTokenRequest(code);	
+		return mod.generateTokenRequest(code);
 	},
 
 	// LIFECYCLE
