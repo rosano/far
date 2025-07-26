@@ -58,6 +58,12 @@ h3 {
 
 <hr>
 
+<h3>3: repos</h3>
+
+<div id="3-repos" class="box"></div>
+
+<hr>
+
 <p><em>all configuration can be synced to your remoteStorage.</em></p>
 
 <script>
@@ -159,13 +165,36 @@ const mod = {
 			onclick: () => window.location.href = redirect_uri,
 		}));
 
+		const result = await (await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data),
+		})).json();
+
 		document.getElementById('2-post').appendChild(Object.assign(document.createElement('pre'), {
+			textContent: JSON.stringify(result, null, ' '),
+		}));
+
+		if (result.access_token) {
+			mod.generateListRepos(result.access_token);
+		}
+	},
+ 
+	async generateListRepos (token) {
+		const url = `https://${ mod._dataObject.ForgejoDomain }/api/v1/user/repos`;
+
+		document.getElementById('3-repos').appendChild(Object.assign(document.createElement('span'), {
+			textContent: 'GET ' + url,
+		}));
+
+		document.getElementById('3-repos').appendChild(Object.assign(document.createElement('pre'), {
 			textContent: JSON.stringify(await (await fetch(url, {
-				method: 'POST',
 				headers: {
+					'Authorization': 'token ' + token,
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(data),
 			})).json(), null, ' '),
 		}));
 	},
