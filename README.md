@@ -108,6 +108,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 		<li>per-app/dev setup</li>
 		<li>simple end-user ux</li>
 		<li>only works per instance (not federated)</li>
+		<li>admin access only (scopes not implemented)</li>
 	</ul>
 </td>
 </tr>
