@@ -105,7 +105,7 @@ const uClearContainer = (element) => {
 };
 
 const redirect_uri = location.href.split('?')[0].split('#')[0];
-const code_challenge_method = 'plain';
+const code_challenge_method = 'S256';
 
 const mod = {
 
@@ -113,15 +113,15 @@ const mod = {
 
 	async generateAuthURL () {
 		const code_verifier = uRandomString(128);
-		const code_challenge = await uSHA256(code_verifier);
 
+		localStorage.setItem('code_verifier', code_verifier);
+		
 		const params = {
 			client_id: mod._dataObject.ForgejoClientID,
 			redirect_uri,
 			response_type: 'code',
 			code_challenge_method,
-			code_challenge,
-			state: code_challenge,
+			code_challenge: await uSHA256(code_verifier),
 		};
 
 		const authorizationURL = uURL(`https://${ mod._dataObject.ForgejoDomain }/login/oauth/authorize`, params);
@@ -145,7 +145,7 @@ const mod = {
 			grant_type: 'authorization_code',
 			redirect_uri,
 			// code_challenge_method,
-			code_verifier: (new URLSearchParams(location.search)).get('state'),
+			code_verifier: localStorage.getItem('code_verifier'),
 		};
 
 		document.getElementById('2-post').appendChild(Object.assign(document.createElement('span'), {
