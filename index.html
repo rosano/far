@@ -189,7 +189,8 @@ const mod = {
 	},
  
 	async generateListRepos (token) {
-		const url = `https://${ mod._dataObject.ForgejoDomain }/api/v1/user/repos`;
+		const prefix = mod._dataObject.ForgejoDomain === 'github.com' ? 'https://api.github.com' : `https://${ mod._dataObject.ForgejoDomain }/api/v1`;
+		const url = prefix + '/user/repos';
 
 		document.getElementById('3-repos').appendChild(Object.assign(document.createElement('span'), {
 			textContent: 'GET ' + url,
