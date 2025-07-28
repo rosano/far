@@ -244,7 +244,7 @@ const mod = {
 
 	setupInstance () {
 		Object.assign(document.getElementById('instance'), {
-			value: mod._dataObject.ForgejoDomain,
+			value: mod._dataObject.ForgejoDomain || '',
 			oninput: (event) => {
 				mod.dataSet('ForgejoDomain', event.target.value);
 
