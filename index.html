@@ -144,7 +144,11 @@ const mod = {
 	},
  
 	async generateTokenRequest (code) {
-		const url = `https://${ mod._dataObject.ForgejoDomain }/login/oauth/access_token`;
+		let url = `https://${ mod._dataObject.ForgejoDomain }/login/oauth/access_token`;
+
+		if (mod._dataObject.FARServer) {
+			url = mod._dataObject.FARServer.concat(url);
+		}
 
 		const data = {
 			client_id: mod._dataObject.ForgejoClientID,
