@@ -54,6 +54,8 @@ h3 {
 
 <h3>2: exchange token</h3>
 
+<p><small><input id="server" placeholder="optional FAR server URL"> for GitHub</small></p>
+
 <div id="2-post" class="box"></div>
 
 <hr>
@@ -309,6 +311,17 @@ const mod = {
 		}
 
 		return mod.generateAuthURL();
+	},
+
+	setupServer () {
+		Object.assign(document.getElementById('server'), {
+			value: mod._dataObject.FARServer || '',
+			oninput: (event) => {
+				mod.dataSet('FARServer', event.target.value);
+
+				return mod.lifecycleStorageDidInitialize();
+			},
+		})
 	},
 
 	setupOauth () {
