@@ -261,27 +261,14 @@ const mod = {
 	_setupClientIDForm () {
 		uClearContainer(document.getElementById('1-link'));
 		
-		const onsubmit = () => {
-			mod.dataSet('ForgejoClientID', input.value);
-
-			mod.setupClientID();
-		};
-
-		const form = document.createElement('form');
-		const input = document.createElement('input');
-
-		document.getElementById('1-link').appendChild(Object.assign(form, {
-			onsubmit,
-		}));
-
-		form.appendChild(Object.assign(input, {
+		document.getElementById('1-link').appendChild(Object.assign(document.createElement('input'), {
 			placeholder: 'client_id',
 			autofocus: true,
-		}));
+			oninput (event) {
+				mod.dataSet('ForgejoClientID', event.target.value);
 
-		form.appendChild(Object.assign(document.createElement('button'), {
-			textContent: 'Save Client ID',
-			onclick: onsubmit,
+				mod.setupClientID();
+			},
 		}));
 	},
 
