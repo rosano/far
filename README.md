@@ -6,7 +6,7 @@ Exploring data storage in forge repositories, ideally in browser-based apps.
 
 ## GitHub
 
-Paired with [FAR server](https://github.com/rosano/far-server) to pass `client_secret`.
+Paired with [FAR server](https://github.com/rosano/far-server) if needed to pass `client_secret`.
 
 <table>
 <tbody>
