@@ -86,7 +86,7 @@ Paired with [FAR server](https://github.com/rosano/far-server) if needed to pass
 </tbody>
 </table>
 
-### Codeberg / Forejo / Gitea
+## Codeberg / Forejo / Gitea
 
 <table>
 <tbody>
