@@ -2,7 +2,7 @@
 
 Exploring data storage in forge repositories, ideally in browser-based apps.
 
-[far.rosano.ca](https://far.rosano.ca).
+https://far.rosano.ca
 
 ## GitHub
 
